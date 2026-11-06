@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://b3x8vq4m2k1qn"]
+
+[ext_resource type="Script" uid="uid://bd5cryo4no0bo" path="res://scripts/player.gd" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://cq1n8x7h4m2p" path="res://scenes/ghost.tscn" id="2_ghost"]
+[ext_resource type="PackedScene" uid="uid://dpp2plate01aa" path="res://scenes/pressure_plate.tscn" id="3_plate"]
+[ext_resource type="PackedScene" uid="uid://ddoor01lineaa" path="res://scenes/door.tscn" id="4_door"]
+[ext_resource type="PackedScene" uid="uid://dm7c5p2rgn26m" path="res://scenes/jump_obstacle.tscn" id="5_jumpob"]
+[ext_resource type="PackedScene" uid="uid://dturret01aa" path="res://scenes/turret.tscn" id="6_turret"]
+[ext_resource type="PackedScene" uid="uid://dcorpse01aa" path="res://scenes/corpse.tscn" id="7_corpse"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_player"]
+height = 32.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_obstacle"]
+size = Vector2(64, 64)
+
+[node name="Main" type="Node2D" unique_id=938068466]
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=740435837]
+script = ExtResource("1_player")
+ghost_scene = ExtResource("2_ghost")
+corpse_scene = ExtResource("7_corpse")
+
+[node name="Body" type="Polygon2D" parent="Player" unique_id=1076549995]
+color = Color(0.25, 0.6, 1, 1)
+polygon = PackedVector2Array(-9, -16, 9, -16, 9, 16, -9, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1154011458]
+shape = SubResource("CapsuleShape2D_player")
+
+[node name="CountdownTimer" type="Timer" parent="Player" unique_id=518507565]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
+[node name="CountdownLabel" type="Label" parent="Player" unique_id=912254837]
+offset_left = -12.0
+offset_top = -48.0
+offset_right = 12.0
+offset_bottom = -24.0
+theme_override_font_sizes/font_size = 24
+text = "12"
+horizontal_alignment = 1
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1852118385]
+
+[node name="Obstacle1" type="StaticBody2D" parent="." unique_id=1893240204]
+position = Vector2(200, -120)
+
+[node name="Body" type="Polygon2D" parent="Obstacle1" unique_id=800049970]
+color = Color(0.85, 0.85, 0.85, 1)
+polygon = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle1" unique_id=566624808]
+shape = SubResource("RectangleShape2D_obstacle")
+
+[node name="Obstacle2" type="StaticBody2D" parent="." unique_id=235064927]
+position = Vector2(-220, 90)
+
+[node name="Body" type="Polygon2D" parent="Obstacle2" unique_id=1890602669]
+color = Color(0.85, 0.85, 0.85, 1)
+polygon = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle2" unique_id=1114946368]
+shape = SubResource("RectangleShape2D_obstacle")
+
+[node name="PressurePlate" parent="." unique_id=845444935 instance=ExtResource("3_plate")]
+position = Vector2(-59, 44)
+
+[node name="Door" parent="." unique_id=253457043 instance=ExtResource("4_door")]
+position = Vector2(21, 263)
+
+[node name="JumpObstacle" parent="." unique_id=2091068698 instance=ExtResource("5_jumpob")]
+position = Vector2(60, -160)
+
+[node name="Turret" parent="." unique_id=1475249546 instance=ExtResource("6_turret")]
+position = Vector2(192, -76)
+rotation = 1.5708
+fire_cooldown = 3.0
+bullet_speed = 900.0

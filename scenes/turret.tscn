@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dturret01aa"]
+
+[ext_resource type="Script" uid="uid://dqhrxkkra7kw1" path="res://scripts/turret.gd" id="1_turret"]
+[ext_resource type="PackedScene" uid="uid://dbullet01aa" path="res://scenes/bullet.tscn" id="2_bullet"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_turret"]
+size = Vector2(32, 32)
+
+[node name="Turret" type="StaticBody2D" unique_id=1652313745]
+script = ExtResource("1_turret")
+bullet_speed = 1400.0
+bullet_scene = ExtResource("2_bullet")
+
+[node name="Body" type="Polygon2D" parent="." unique_id=170690150]
+color = Color(0.7, 0.25, 0.25, 1)
+polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[node name="Muzzle" type="Polygon2D" parent="." unique_id=1560629710]
+color = Color(0.95, 0.85, 0.35, 1)
+polygon = PackedVector2Array(14, -5, 26, -3, 26, 3, 14, 5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=133789698]
+shape = SubResource("RectangleShape2D_turret")
+
+[node name="Laser" type="Line2D" parent="." unique_id=1465067847]
+points = PackedVector2Array(0, 0, 240, 0)
+width = 3.0
+default_color = Color(1, 0.35, 0.35, 0.35)

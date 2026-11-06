@@ -1,0 +1,11 @@
+# Godot 4+ 缓存与导入数据
+.godot/
+android/
+
+# 导出产物
+export_presets.cfg
+*.translation
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://ddoor01lineaa"]
+
+[ext_resource type="Script" path="res://scripts/door.gd" id="1_door"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
+size = Vector2(96, 8)
+
+[node name="Door" type="StaticBody2D"]
+script = ExtResource("1_door")
+
+[node name="Line" type="Line2D" parent="."]
+points = PackedVector2Array(-48, 0, 48, 0)
+width = 6.0
+default_color = Color(0.95, 0.35, 0.3, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_door")
