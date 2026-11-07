@@ -24,6 +24,9 @@ func _process(_delta: float) -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if _won or not body.is_in_group("player"):
 		return
+	# 玩家正在死亡/被吞噬动画中时不触发终点（动画 tween 可能把玩家推入检测区）。
+	if body.get("_pending_death_reset") or body.get("_devouring"):
+		return
 	_won = true
 	print("win")
 	win.emit()

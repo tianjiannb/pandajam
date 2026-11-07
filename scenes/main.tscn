@@ -161,7 +161,7 @@ tile_set = SubResource("TileSet_ifow5")
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=740435837]
 z_index = 10
-position = Vector2(-1080, 419)
+position = Vector2(-1002, 433)
 collision_mask = 4
 script = ExtResource("1_player")
 ghost_scene = ExtResource("2_ghost")
@@ -231,6 +231,9 @@ scale = Vector2(1.4, 1)
 door_id = 99
 closed_color = Color(0.6, 0.2, 0.9, 1)
 open_color = Color(0.85, 0.5, 1, 0.5)
+
+[node name="ExitTrigger" parent="door" unique_id=900600575 instance=ExtResource("45_exit")]
+position = Vector2(-890, -145)
 
 [node name="pressurePlate" type="Node2D" parent="." unique_id=2086996128]
 
@@ -469,6 +472,3 @@ vision_target_path = NodePath("../../VisionSystem")
 [node name="SubViewport" type="SubViewport" parent="." unique_id=1598845265]
 
 [connection signal="settings_requested" from="system/UI/PauseMenu" to="system/UI/SettingsMenu" method="open"]
-
-[node name="ExitTrigger" parent="door" instance=ExtResource("45_exit")]
-position = Vector2(-896, -110)

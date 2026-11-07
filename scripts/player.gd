@@ -63,6 +63,7 @@ var _pending_death_reset := false
 var _devouring := false  # 被死亡装置吞噬中：冻结移动与走路摇晃，交给吞噬动画驱动
 var _tick_played := false
 var _gun_direction := Vector2.RIGHT
+var _sprite_home_scale := Vector2.ONE
 
 
 func _ready() -> void:
@@ -72,6 +73,7 @@ func _ready() -> void:
 	add_to_group("bullet_target")
 	_start_transform = global_transform
 	_sprite_home = _sprite.position
+	_sprite_home_scale = _sprite.scale
 	_sprite.play(&"idle")
 	_update_countdown_label()
 	countdown_timer.timeout.connect(_on_countdown_timeout)
@@ -369,5 +371,5 @@ func _reset_visual() -> void:
 	if _sprite != null:
 		_sprite.rotation = 0.0
 		_sprite.position = _sprite_home
-		_sprite.scale = Vector2.ONE
+		_sprite.scale = _sprite_home_scale
 		_sprite.modulate = Color.WHITE

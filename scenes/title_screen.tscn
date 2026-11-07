@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bdggvt23p23e4"]
 
 [ext_resource type="Script" uid="uid://di7di7mrk86dc" path="res://scripts/title_screen.gd" id="1_title"]
-[ext_resource type="Texture2D" uid="uid://ctgkyy3r2bkdd" path="res://assets/cinematic/56dbfd46d2a0837aaf2a11cb2af67808.png" id="2_mgrm8"]
+[ext_resource type="Texture2D" path="res://assets/cinematic/56dbfd46d2a0837aaf2a11cb2af67808.png" id="2_mgrm8"]
 [ext_resource type="Script" uid="uid://cxuur1cy03fsm" path="res://scripts/title_dust_layer.gd" id="3_dust"]
 [ext_resource type="Texture2D" uid="uid://cn5ssd34fewou" path="res://assets/ui/title_veil.png" id="4_veil"]
 
@@ -75,10 +75,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -19.0
-offset_top = -99.0
-offset_right = -19.0
-offset_bottom = -99.0
+offset_left = -32.0
+offset_top = -147.0
+offset_right = -32.0
+offset_bottom = -48.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 88
@@ -93,27 +93,6 @@ size_flags_horizontal = 0
 size_flags_vertical = 4
 theme_override_constants/separation = 8
 alignment = 1
-
-[node name="GameTitle" type="Label" parent="LeftMenuMargin/TitleMenu" unique_id=411827763]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(0.6117647, 0.92156863, 0.8156863, 1)
-theme_override_colors/font_shadow_color = Color(0.29, 0.92, 0.72, 0.3)
-theme_override_colors/font_outline_color = Color(0.047058824, 0.15294118, 0.15686275, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 68
-text = "DL-Circle"
-
-[node name="Subtitle" type="Label" parent="LeftMenuMargin/TitleMenu" unique_id=260163155]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(0.5764706, 0.7411765, 0.7294118, 1)
-theme_override_colors/font_outline_color = Color(0.03137255, 0.06666667, 0.05882353, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 15
-text = "十二秒一轮 · 影子会替你记住"
 
 [node name="Spacer1" type="Control" parent="LeftMenuMargin/TitleMenu" unique_id=1461393256]
 custom_minimum_size = Vector2(0, 340)
