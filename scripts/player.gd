@@ -125,6 +125,9 @@ func on_devoured(trap: Node2D) -> void:
 	killed.emit()
 	SfxManager.play("death")
 	visible = true
+	# 吞噬动画期间禁用碰撞，防止 tween 路径误触发终点/其他机关。
+	set_deferred("collision_layer", 0)
+	set_deferred("collision_mask", 0)
 	var mouth: Vector2 = trap.global_position + Vector2(0, -26.0)
 	var t := create_tween()
 	t.set_parallel(true)
@@ -195,6 +198,9 @@ func _reset_round_and_spawn_ghost() -> void:
 	_spawn_ghost_from_recording()
 	global_transform = _start_transform
 	velocity = Vector2.ZERO
+	# 恢复碰撞（吞噬动画期间被禁用）。
+	collision_layer = 1
+	collision_mask = 4
 	_reset_visual()
 	if is_jumping:
 		is_jumping = false
