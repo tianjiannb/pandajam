@@ -121,11 +121,11 @@
 8. **目录结构**（与现有工程一致）：
    ```
    assets/
-     characters/  props/  environment/
-     ui/  vfx/
-     audio/{sfx,bgm}/
-     fonts/
-     source/
+	 characters/  props/  environment/
+	 ui/  vfx/
+	 audio/{sfx,bgm}/
+	 fonts/
+	 source/
    ```
 9. **交付方式**：单个 zip（含 manifest），版本号 `v主.次`，每次交付附变更说明（新增/修改/废弃）。
 10. **验收标准**：Godot 导入无报错、无警告级尺寸异常；帧序播放正确、循环无跳帧；透明通道正确；音频可无缝循环；命名与 manifest 一致。

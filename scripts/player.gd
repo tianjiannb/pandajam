@@ -87,6 +87,12 @@ func on_bullet_hit() -> void:
 	killed.emit()
 
 
+## 自杀键（Q）：玩家主动清空本轮倒计时，立即结束当前循环。
+## 复用与机关枪命中完全一致的死亡流程，保证两种死法效果一致。
+func suicide() -> void:
+	on_bullet_hit()
+
+
 ## 尸体只是视觉残留：不碰撞、不触发机关；下一次任意重置时消失。
 func _spawn_corpse(death_transform: Transform2D) -> void:
 	if corpse_scene == null:
@@ -190,6 +196,9 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("use_hammer"):
 		use_hammer()
 
+	if Input.is_action_just_pressed("suicide"):
+		suicide()
+
 	_recording.append(global_transform)
 	_recorded_actions.append(Input.is_action_just_pressed("use_hammer"))
 
@@ -202,10 +211,11 @@ func _start_jump() -> void:
 	_spawn_jump_slash()
 
 
-## 起跳瞬间的一次性刀光弧线，朝向跳跃方向。
+## 起跳瞬间的一次性位移白线，朝向跳跃方向，长度对齐本次跳跃实际位移距离。
 func _spawn_jump_slash() -> void:
-	var slash := JUMP_SLASH_SCENE.instantiate() as Node2D
+	var slash := JUMP_SLASH_SCENE.instantiate()
 	slash.rotation = _jump_direction.angle()
+	slash.fit_to_distance(jump_distance)
 	add_child(slash)
 
 
@@ -241,4 +251,3 @@ func _reset_visual() -> void:
 	if _sprite != null:
 		_sprite.rotation = 0.0
 		_sprite.position = _sprite_home
-

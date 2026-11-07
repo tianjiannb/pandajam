@@ -1,20 +1,23 @@
 [gd_scene format=3 uid="uid://dm7c5p2rgn26m"]
 
-[ext_resource type="Script" path="res://scripts/jump_obstacle.gd" id="1_jumpob"]
-[ext_resource type="Texture2D" path="res://assets/generated/jump_obstacle.png" id="2_jumpob_tex"]
+[ext_resource type="Script" uid="uid://cfln5iplsfkkv" path="res://scripts/jump_obstacle.gd" id="1_jumpob"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4l6th"]
+load_path = "res://.godot/imported/jump_obstacle.png-3c9b234ad647c30f3550aac6287a0bd0.ctex"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jumpob"]
 size = Vector2(32, 64)
 
-[node name="JumpObstacle" type="StaticBody2D"]
+[node name="JumpObstacle" type="StaticBody2D" unique_id=749027474]
 collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_jumpob")
 
-[node name="Body" type="Polygon2D" parent="."]
-texture = ExtResource("2_jumpob_tex")
-color = Color(1, 1, 1, 1)
-polygon = PackedVector2Array(-16, -32, 16, -32, 16, 32, -16, 32)
+[node name="Body" type="Polygon2D" parent="." unique_id=1142863392]
+position = Vector2(-17, -31)
+texture = SubResource("CompressedTexture2D_4l6th")
+polygon = PackedVector2Array(-0.098985314, -0.7658634, 31.901016, -0.7658634, 31.901016, 63.23414, -0.098985314, 63.23414)
+uv = PackedVector2Array(-0.098985314, -0.7658634, 31.901016, -0.7658634, 31.901016, 63.23414, -0.098985314, 63.23414)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=855312418]
 shape = SubResource("RectangleShape2D_jumpob")

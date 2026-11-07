@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://shaders/handdrawn_label.gdshader" id="1_shader"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/wobble_strength = 0.012
+shader_parameter/noise_scale = 10.0
+shader_parameter/jitter_speed = 2.4
+shader_parameter/rotation_jitter = 0.04
+shader_parameter/ink_edge_strength = 0.35
