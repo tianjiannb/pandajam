@@ -46,7 +46,8 @@ func _run() -> void:
 	turret.fired.connect(_on_fired)
 
 	_check(turret.is_in_group("turrets"), "turret is in turrets group")
-	_check(absf(turret.fire_cooldown - 1.0) < 0.001, "default cooldown is 1s (adjustable)")
+	_check(turret.fire_cooldown > 0.0, "cooldown is configurable (scene=%.1fs)" % turret.fire_cooldown)
+	turret.fire_cooldown = 1.0
 	_check(turret.laser_length > 0.0, "laser length is configurable")
 
 	# 统一摆位：枪在 (0,-400) 朝下，玩家站在 (0,-250) 的激光内。

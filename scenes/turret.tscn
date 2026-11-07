@@ -7,6 +7,8 @@
 size = Vector2(32, 32)
 
 [node name="Turret" type="StaticBody2D" unique_id=1652313745]
+collision_layer = 4
+collision_mask = 0
 script = ExtResource("1_turret")
 bullet_speed = 1400.0
 bullet_scene = ExtResource("2_bullet")

@@ -6,6 +6,8 @@
 size = Vector2(32, 64)
 
 [node name="JumpObstacle" type="StaticBody2D"]
+collision_layer = 4
+collision_mask = 0
 script = ExtResource("1_jumpob")
 
 [node name="Body" type="Polygon2D" parent="."]

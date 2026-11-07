@@ -9,8 +9,8 @@ class_name MachineGunTurret
 ## 每次开火时广播发射方向，供测试与上层逻辑监听。
 signal fired(direction: Vector2)
 
-## 检测层：1 = 玩家与墙体，2 = 副本。
-const DETECT_MASK := 3
+## 检测层：1 = 玩家，2 = 副本，4 = 场景实体（会挡住激光）。
+const DETECT_MASK := 7
 
 ## 激光检测长度（像素）。
 @export var laser_length := 240.0

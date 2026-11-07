@@ -20,6 +20,12 @@ signal jump_state_changed(is_jumping: bool)
 ## 被机关枪子弹命中（已按倒计时结束流程归位并生成本轮副本）时广播。
 signal killed
 
+## 锤子能力状态：拾取锤子后为 true，新循环开始重置为 false。
+signal hammer_state_changed(has_hammer: bool)
+
+var has_hammer := false
+@export var hammer_use_range := 72.0
+
 var is_jumping := false
 var _jump_direction := Vector2.RIGHT
 var _jump_time_left := 0.0
@@ -30,6 +36,7 @@ var _last_move_dir := Vector2.RIGHT
 
 var _start_transform: Transform2D
 var _recording: Array[Transform2D] = []
+var _recorded_actions: Array[bool] = []
 var _ghost_count := 0
 
 
@@ -41,6 +48,8 @@ func _ready() -> void:
 	_start_transform = global_transform
 	_update_countdown_label()
 	countdown_timer.timeout.connect(_on_countdown_timeout)
+	# 显式启动，避免场景重新保存后 autostart 标记丢失导致副本机制停止。
+	countdown_timer.start()
 
 
 func _process(_delta: float) -> void:
@@ -81,6 +90,16 @@ func _clear_corpses() -> void:
 ## 一轮结束的统一流程：生成本轮副本 -> 自己归位 -> 清空录制 -> 重新开始倒计时。
 func _reset_round_and_spawn_ghost() -> void:
 	_clear_corpses()
+	for hammer in get_tree().get_nodes_in_group("hammers"):
+		hammer.reset_pickup()
+	for actor in get_tree().get_nodes_in_group("bullet_target"):
+		actor.reset_hammer()
+	# 可破坏物体也随每轮循环恢复原状。
+	for object in get_tree().get_nodes_in_group("breakable"):
+		object.restore()
+	# 所有旧副本与玩家在同一循环边界归位并重启倒计时。
+	for ghost in get_tree().get_nodes_in_group("ghosts"):
+		ghost.restart_cycle()
 	_spawn_ghost_from_recording()
 	global_transform = _start_transform
 	velocity = Vector2.ZERO
@@ -88,6 +107,7 @@ func _reset_round_and_spawn_ghost() -> void:
 		is_jumping = false
 		jump_state_changed.emit(false)
 	_recording.clear()
+	_recorded_actions.clear()
 	countdown_timer.start()
 
 
@@ -98,8 +118,33 @@ func _spawn_ghost_from_recording() -> void:
 	_ghost_count += 1
 	# 显式命名，避免同名实例被 Godot 自动改成 "@Ghost@2" 导致查找失败。
 	ghost.name = "Ghost%d" % _ghost_count
+	# 先写入首帧位置，再进入场景树，避免出生时短暂出现在玩家归位点上。
+	ghost.start_replay(_recording.duplicate(), _recorded_actions.duplicate(), countdown_timer.wait_time)
 	get_parent().add_child(ghost)
-	ghost.start_replay(_recording.duplicate())
+
+
+## 锤子是能力而非背包物品：碰到锤子后由锤子道具调用，返回是否成功拾取。
+func pickup_hammer() -> bool:
+	if has_hammer:
+		return false
+	has_hammer = true
+	hammer_state_changed.emit(true)
+	return true
+
+
+func reset_hammer() -> void:
+	if has_hammer:
+		has_hammer = false
+		hammer_state_changed.emit(false)
+
+
+## 按 E 破坏附近带有 breakable 标签的物体；没有能力时不产生效果。
+func use_hammer() -> void:
+	if not has_hammer:
+		return
+	for object in get_tree().get_nodes_in_group("breakable"):
+		if object is Node2D and global_position.distance_to(object.global_position) <= hammer_use_range:
+			object.destroy()
 
 
 func _physics_process(delta: float) -> void:
@@ -125,7 +170,11 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+	if Input.is_action_just_pressed("use_hammer"):
+		use_hammer()
+
 	_recording.append(global_transform)
+	_recorded_actions.append(Input.is_action_just_pressed("use_hammer"))
 
 
 func _start_jump() -> void:

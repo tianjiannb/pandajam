@@ -8,6 +8,11 @@ class_name DoorGate
 signal state_changed(door_id: int, is_open: bool)
 
 @export var door_id := 1
+## 门的总长度（像素）；视觉和碰撞箱同步调整。
+@export_range(16.0, 1024.0, 1.0) var door_length := 96.0:
+	set(value):
+		door_length = maxf(value, 16.0)
+		_update_length()
 @export var closed_color := Color(0.95, 0.35, 0.3, 1)
 @export var open_color := Color(0.3, 0.9, 0.4, 0.4)
 
@@ -18,9 +23,20 @@ var is_open := false
 
 
 func _ready() -> void:
+	_update_length()
 	_line.default_color = closed_color
 	# 延迟到整棵场景树 ready 后再连接，保证压力板已入组。
 	call_deferred("_connect_plates")
+
+
+func _update_length() -> void:
+	if not is_node_ready():
+		return
+	var half := door_length * 0.5
+	_line.points = PackedVector2Array([Vector2(-half, 0.0), Vector2(half, 0.0)])
+	var shape := _collision.shape as RectangleShape2D
+	if shape != null:
+		shape.size = Vector2(door_length, shape.size.y)
 
 
 func _connect_plates() -> void:

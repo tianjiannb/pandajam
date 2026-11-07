@@ -5,7 +5,7 @@ class_name TurretBullet
 ## 命中第一个"子弹目标"（玩家或副本）则让该个体生效，且只击杀这一个个体后销毁；
 ## 命中墙体或超出射程也销毁。
 
-const HIT_MASK := 3
+const HIT_MASK := 7
 
 var _direction := Vector2.RIGHT
 var _speed := 720.0

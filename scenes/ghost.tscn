@@ -7,6 +7,7 @@ radius = 10.0
 height = 32.0
 
 [node name="Ghost" type="CharacterBody2D"]
+z_index = 10
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_ghost")
@@ -17,3 +18,17 @@ polygon = PackedVector2Array(-9, -16, 9, -16, 9, 16, -9, 16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_ghost")
+
+[node name="CountdownTimer" type="Timer" parent="."]
+wait_time = 12.0
+one_shot = true
+
+[node name="CountdownLabel" type="Label" parent="."]
+offset_left = -12.0
+offset_top = -48.0
+offset_right = 12.0
+offset_bottom = -24.0
+theme_override_colors/font_color = Color(0.95, 0.65, 0.95, 1)
+theme_override_font_sizes/font_size = 24
+text = "12"
+horizontal_alignment = 1

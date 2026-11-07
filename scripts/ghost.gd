@@ -8,14 +8,40 @@ extends CharacterBody2D
 
 ## 被子弹击杀时广播。
 signal destroyed
+signal hammer_state_changed(has_hammer: bool)
+
+var has_hammer := false
+@export var hammer_use_range := 72.0
 
 var _frames: Array[Transform2D] = []
+var _actions: Array[bool] = []
 var _playhead := 0
+var _cycle_duration := 12.0
+
+@onready var countdown_timer: Timer = $CountdownTimer
+@onready var countdown_label: Label = $CountdownLabel
 
 
 func _ready() -> void:
+	add_to_group("ghosts")
 	add_to_group("plate_activator")
 	add_to_group("bullet_target")
+	countdown_timer.timeout.connect(restart_cycle)
+	# 手动调用 start_replay 时可能在 add_child 之前设置位置；入树后恢复首帧，
+	# 防止 Node2D 的通知流程把全局位置重置为默认值。
+	if not _frames.is_empty():
+		global_transform = _frames[0]
+		countdown_timer.wait_time = _cycle_duration
+		countdown_timer.start()
+	_update_countdown_label()
+
+
+func _process(_delta: float) -> void:
+	_update_countdown_label()
+
+
+func _update_countdown_label() -> void:
+	countdown_label.text = str(int(ceil(countdown_timer.time_left)))
 
 
 ## 与玩家完全一致：被子弹击杀后在原地留下尸体；尸体在下一次重置时统一清理。
@@ -28,16 +54,60 @@ func on_bullet_hit() -> void:
 	queue_free()
 
 
-func start_replay(frames: Array[Transform2D]) -> void:
+func start_replay(frames: Array[Transform2D], actions: Array[bool] = [], cycle_duration: float = 12.0) -> void:
 	_frames = frames
+	_actions = actions
+	_cycle_duration = cycle_duration
 	_playhead = 0
+	reset_hammer()
 	if _frames.is_empty():
 		return
 	global_transform = _frames[0]
+	if is_node_ready():
+		countdown_timer.wait_time = _cycle_duration
+		countdown_timer.start()
+
+
+## 全局循环边界：回到本轮录制的起点，清除临时能力并重启自己的倒计时。
+## 由玩家重置流程统一调用；自己的 Timer 超时也走同一入口。
+func restart_cycle() -> void:
+	_playhead = 0
+	reset_hammer()
+	if not _frames.is_empty():
+		global_transform = _frames[0]
+	if is_node_ready():
+		countdown_timer.stop()
+		countdown_timer.start()
+		_update_countdown_label()
+
+
+func pickup_hammer() -> bool:
+	if has_hammer:
+		return false
+	has_hammer = true
+	hammer_state_changed.emit(true)
+	return true
+
+
+func reset_hammer() -> void:
+	if has_hammer:
+		has_hammer = false
+		hammer_state_changed.emit(false)
+
+
+func use_hammer() -> void:
+	if not has_hammer:
+		return
+	for object in get_tree().get_nodes_in_group("breakable"):
+		if object is Node2D and global_position.distance_to(object.global_position) <= hammer_use_range:
+			object.destroy()
 
 
 func _physics_process(_delta: float) -> void:
 	if _frames.is_empty():
 		return
 	global_transform = _frames[_playhead]
-	_playhead = (_playhead + 1) % _frames.size()
+	if _playhead < _actions.size() and _actions[_playhead]:
+		use_hammer()
+	# 循环边界由倒计时统一控制；尾帧之后停留在原地，等待同步释放。
+	_playhead = mini(_playhead + 1, _frames.size() - 1)
