@@ -14,11 +14,13 @@ var is_active := false
 var _bodies: Array[Node2D] = []
 
 @onready var _visual: Polygon2D = $Body
+@onready var _active_visual: Polygon2D = $ActiveBody
 
 
 func _ready() -> void:
 	add_to_group("pressure_plates")
 	_visual.color = idle_color
+	_active_visual.visible = false
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 
@@ -41,4 +43,6 @@ func _refresh() -> void:
 		return
 	is_active = now_active
 	_visual.color = active_color if is_active else idle_color
+	_active_visual.visible = is_active
+	_visual.visible = not is_active
 	state_changed.emit(plate_id, is_active)

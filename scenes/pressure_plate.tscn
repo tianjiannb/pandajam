@@ -1,18 +1,30 @@
 [gd_scene format=3 uid="uid://dpp2plate01aa"]
 
-[ext_resource type="Script" path="res://scripts/pressure_plate.gd" id="1_plate"]
+[ext_resource type="Script" uid="uid://c3l4wtjjnpmw" path="res://scripts/pressure_plate.gd" id="1_plate"]
+[ext_resource type="Texture2D" uid="uid://baa8hu0drra3j" path="res://assets/generated/pressure_plate.png" id="2_plate_tex"]
+[ext_resource type="Texture2D" uid="uid://dvb380ngjpagj" path="res://assets/generated/pressure_plate_active.png" id="3_plate_active_tex"]
+[ext_resource type="Material" path="res://shaders/pressure_plate_sink.tres" id="4_plate_sink"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_plate"]
 size = Vector2(48, 48)
 
-[node name="PressurePlate" type="Area2D"]
+[node name="PressurePlate" type="Area2D" unique_id=1055553267]
 collision_layer = 8
 collision_mask = 3
 script = ExtResource("1_plate")
 
-[node name="Body" type="Polygon2D" parent="."]
-color = Color(0.8, 0.8, 0.8, 1)
-polygon = PackedVector2Array(-24, -24, 24, -24, 24, 24, -24, 24)
+[node name="Body" type="Polygon2D" parent="." unique_id=2065401014]
+position = Vector2(-24, -24)
+texture = ExtResource("2_plate_tex")
+polygon = PackedVector2Array(0.3199978, -1.5507717, 48.32, -1.5507717, 48.32, 46.449226, 0.3199978, 46.449226)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="ActiveBody" type="Polygon2D" parent="." unique_id=1912341323]
+visible = false
+material = ExtResource("4_plate_sink")
+position = Vector2(-23, -26)
+color = Color(0.7137255, 0.16862746, 0.24705882, 1)
+texture = ExtResource("3_plate_active_tex")
+polygon = PackedVector2Array(-0.8086529, -0.8086529, 47.191345, -0.8086529, 47.191345, 47.191345, -0.8086529, 47.191345)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=699185996]
 shape = SubResource("RectangleShape2D_plate")

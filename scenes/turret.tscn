@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dqhrxkkra7kw1" path="res://scripts/turret.gd" id="1_turret"]
 [ext_resource type="PackedScene" uid="uid://dbullet01aa" path="res://scenes/bullet.tscn" id="2_bullet"]
+[ext_resource type="Texture2D" path="res://assets/generated/turret.png" id="3_turret_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_turret"]
 size = Vector2(32, 32)
@@ -14,7 +15,8 @@ bullet_speed = 1400.0
 bullet_scene = ExtResource("2_bullet")
 
 [node name="Body" type="Polygon2D" parent="." unique_id=170690150]
-color = Color(0.7, 0.25, 0.25, 1)
+texture = ExtResource("3_turret_tex")
+color = Color(1, 1, 1, 1)
 polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
 [node name="Muzzle" type="Polygon2D" parent="." unique_id=1560629710]

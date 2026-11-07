@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dm7c5p2rgn26m"]
 
 [ext_resource type="Script" path="res://scripts/jump_obstacle.gd" id="1_jumpob"]
+[ext_resource type="Texture2D" path="res://assets/generated/jump_obstacle.png" id="2_jumpob_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jumpob"]
 size = Vector2(32, 64)
@@ -11,7 +12,8 @@ collision_mask = 0
 script = ExtResource("1_jumpob")
 
 [node name="Body" type="Polygon2D" parent="."]
-color = Color(0.95, 0.65, 0.2, 1)
+texture = ExtResource("2_jumpob_tex")
+color = Color(1, 1, 1, 1)
 polygon = PackedVector2Array(-16, -32, 16, -32, 16, 32, -16, 32)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

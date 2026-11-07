@@ -14,6 +14,14 @@ extends CharacterBody2D
 @export var jump_distance := 96.0
 @export var jump_duration := 0.25
 
+## 移动表现：不另外做走路帧，用角色左右摇晃 + 轻微上下起伏表现动效。
+@export var walk_wobble_degrees := 10.0
+@export var walk_wobble_speed := 14.0
+@export var walk_bob_height := 3.0
+
+## 跳跃不做独立动画：起跳瞬间生成一次刀光着色器特效。
+const JUMP_SLASH_SCENE := preload("res://scenes/jump_slash.tscn")
+
 ## 玩家状态信号：一般状态(false) / 跳跃状态(true)。
 signal jump_state_changed(is_jumping: bool)
 
@@ -33,6 +41,11 @@ var _last_move_dir := Vector2.RIGHT
 
 @onready var countdown_timer: Timer = $CountdownTimer
 @onready var countdown_label: Label = $CountdownLabel
+@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
+
+## 角色贴图的原始局部位置，摇晃时以此为中心。
+var _sprite_home := Vector2.ZERO
+var _wobble_phase := 0.0
 
 var _start_transform: Transform2D
 var _recording: Array[Transform2D] = []
@@ -46,6 +59,8 @@ func _ready() -> void:
 	# 机关枪可命中玩家；副本同样加入该组，命中判定与玩家一致。
 	add_to_group("bullet_target")
 	_start_transform = global_transform
+	_sprite_home = _sprite.position
+	_sprite.play(&"idle")
 	_update_countdown_label()
 	countdown_timer.timeout.connect(_on_countdown_timeout)
 	# 显式启动，避免场景重新保存后 autostart 标记丢失导致副本机制停止。
@@ -103,6 +118,7 @@ func _reset_round_and_spawn_ghost() -> void:
 	_spawn_ghost_from_recording()
 	global_transform = _start_transform
 	velocity = Vector2.ZERO
+	_reset_visual()
 	if is_jumping:
 		is_jumping = false
 		jump_state_changed.emit(false)
@@ -169,6 +185,7 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.move_toward(target_velocity, acceleration * delta)
 
 	move_and_slide()
+	_update_animation(delta)
 
 	if Input.is_action_just_pressed("use_hammer"):
 		use_hammer()
@@ -182,3 +199,46 @@ func _start_jump() -> void:
 	_jump_direction = _last_move_dir
 	_jump_time_left = jump_duration
 	jump_state_changed.emit(true)
+	_spawn_jump_slash()
+
+
+## 起跳瞬间的一次性刀光弧线，朝向跳跃方向。
+func _spawn_jump_slash() -> void:
+	var slash := JUMP_SLASH_SCENE.instantiate() as Node2D
+	slash.rotation = _jump_direction.angle()
+	add_child(slash)
+
+
+## 按实际移动方向选择四向动画；停止移动时回到 idle。
+func _direction_anim_name(dir: Vector2) -> StringName:
+	if absf(dir.x) >= absf(dir.y):
+		return &"right" if dir.x > 0.0 else &"left"
+	return &"down" if dir.y > 0.0 else &"up"
+
+
+## 移动时不换走路帧，只让角色左右摇晃并轻微起伏；停下时平滑收回。
+func _update_animation(delta: float) -> void:
+	var moving := not is_jumping and velocity.length() > 20.0
+	if not moving:
+		if _sprite.animation != &"idle":
+			_sprite.play(&"idle")
+		_wobble_phase = 0.0
+		var back := minf(1.0, delta * 14.0)
+		_sprite.rotation = lerpf(_sprite.rotation, 0.0, back)
+		_sprite.position = _sprite.position.lerp(_sprite_home, back)
+		return
+
+	_sprite.play(_direction_anim_name(velocity))
+	_wobble_phase += delta * walk_wobble_speed
+	var swing := sin(_wobble_phase)
+	_sprite.rotation = deg_to_rad(walk_wobble_degrees) * swing
+	_sprite.position = _sprite_home + Vector2(0.0, -absf(swing) * walk_bob_height)
+
+
+## 循环边界重置时让角色姿态立刻回正。
+func _reset_visual() -> void:
+	_wobble_phase = 0.0
+	if _sprite != null:
+		_sprite.rotation = 0.0
+		_sprite.position = _sprite_home
+

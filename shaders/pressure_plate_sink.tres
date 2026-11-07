@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://shaders/pressure_plate_sink.gdshader" id="1_sink"]
+
+[resource]
+shader = ExtResource("1_sink")
+shader_parameter/sink_depth = 0.12
+shader_parameter/edge_shadow = 0.45
+shader_parameter/plate_center = Vector2(24, 24)
