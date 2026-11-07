@@ -35,7 +35,7 @@ var _memory_texture: ImageTexture
 var _memory_origin := Vector2.ZERO
 
 ## 世界空间雾遮罩（跟随玩家移动，始终覆盖摄像机可见范围）。
-@onready var _fog_rect: ColorRect = $"../FogOverlay"
+@onready var _fog_rect: ColorRect = $FogOverlay
 
 var target: Node2D
 

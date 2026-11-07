@@ -6,7 +6,9 @@ extends CharacterBody2D
 ## 但压力板等 Area2D（掩码含层 2）能正常检测到它。
 ## 视作"过去的自己"：与玩家共用子弹命中判定（bullet_target 组），被子弹打中即留下尸体并消失。
 
-## 被子弹击杀时广播。
+## 被击杀时广播（子弹/死亡装置等）。副本不会因此消失：游戏核心规则是
+## 保留所有历史副本，死亡只是让它在原地留下尸体标记，直到下一次循环重置
+## 时回到录制起点、恢复正常回放。
 signal destroyed
 signal hammer_state_changed(has_hammer: bool)
 
@@ -17,6 +19,9 @@ var _frames: Array[Transform2D] = []
 var _actions: Array[bool] = []
 var _playhead := 0
 var _cycle_duration := 12.0
+
+## 本轮是否已死亡：死亡后停留在原地（不再前进播放头），直到 restart_cycle()。
+var _dead := false
 
 @onready var countdown_timer: Timer = $CountdownTimer
 @onready var countdown_label: Label = $CountdownLabel
@@ -44,14 +49,19 @@ func _update_countdown_label() -> void:
 	countdown_label.text = str(int(ceil(countdown_timer.time_left)))
 
 
-## 与玩家完全一致：被子弹击杀后在原地留下尸体；尸体在下一次重置时统一清理。
+## 被击杀（子弹/死亡装置等）：在原地留下尸体标记，但副本本身不会消失。
+## 游戏核心规则是保留所有历史副本：死亡只是让它停在原地直到下一轮重置，
+## 重置后回到录制起点，恢复正常回放（与之前完全一样）。
 func on_bullet_hit() -> void:
+	if _dead:
+		return
+	_dead = true
 	var corpse: Node2D = (load("res://scenes/corpse.tscn") as PackedScene).instantiate()
 	corpse.is_ghost_corpse = true
 	get_parent().add_child(corpse)
 	corpse.global_transform = global_transform
+	visible = false
 	destroyed.emit()
-	queue_free()
 
 
 func start_replay(frames: Array[Transform2D], actions: Array[bool] = [], cycle_duration: float = 12.0) -> void:
@@ -59,6 +69,8 @@ func start_replay(frames: Array[Transform2D], actions: Array[bool] = [], cycle_d
 	_actions = actions
 	_cycle_duration = cycle_duration
 	_playhead = 0
+	_dead = false
+	visible = true
 	reset_hammer()
 	if _frames.is_empty():
 		return
@@ -70,8 +82,11 @@ func start_replay(frames: Array[Transform2D], actions: Array[bool] = [], cycle_d
 
 ## 全局循环边界：回到本轮录制的起点，清除临时能力并重启自己的倒计时。
 ## 由玩家重置流程统一调用；自己的 Timer 超时也走同一入口。
+## 即使本轮已死亡也会在这里复活：核心规则是副本永不真正消失。
 func restart_cycle() -> void:
 	_playhead = 0
+	_dead = false
+	visible = true
 	reset_hammer()
 	if not _frames.is_empty():
 		global_transform = _frames[0]
@@ -104,7 +119,7 @@ func use_hammer() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if _frames.is_empty():
+	if _frames.is_empty() or _dead:
 		return
 	global_transform = _frames[_playhead]
 	if _playhead < _actions.size() and _actions[_playhead]:

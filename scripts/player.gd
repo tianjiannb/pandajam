@@ -109,6 +109,7 @@ func _clear_corpses() -> void:
 
 
 ## 一轮结束的统一流程：生成本轮副本 -> 自己归位 -> 清空录制 -> 重新开始倒计时。
+## 死亡触发装置与信号控制器的重置延迟到下一帧，让本轮的信号累积有机会完整评估。
 func _reset_round_and_spawn_ghost() -> void:
 	_clear_corpses()
 	for hammer in get_tree().get_nodes_in_group("hammers"):
@@ -131,6 +132,21 @@ func _reset_round_and_spawn_ghost() -> void:
 	_recording.clear()
 	_recorded_actions.clear()
 	countdown_timer.start()
+	# 死亡触发装置与信号控制器延迟到下一帧重置，让本轮内所有 ghost 的触发信号
+	# 先传递给控制器完成评估（例如 ghost1 触发 trap1 + player 触发 trap2 = 开门），
+	# 然后才在新循环的起始帧清空进度、关门，准备下一轮的重新点亮。
+	call_deferred("_reset_traps_and_controllers")
+
+
+## 延迟到下一帧执行：清空死亡触发装置与信号控制器的本轮状态。
+## 必须晚于 _reset_round_and_spawn_ghost() 本身一帧，否则会在同一次死亡
+## 触发的调用栈内把刚刚点亮的信号立刻撤销，导致控制器永远看不到多个
+## 编号同时点亮。
+func _reset_traps_and_controllers() -> void:
+	for trap in get_tree().get_nodes_in_group("death_traps"):
+		trap.restore()
+	for controller in get_tree().get_nodes_in_group("death_signal_controllers"):
+		controller.restore()
 
 
 func _spawn_ghost_from_recording() -> void:

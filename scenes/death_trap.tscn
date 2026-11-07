@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bsw5us7qkeami"]
+
+[ext_resource type="Script" path="res://scripts/death_trap.gd" id="1_trap"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_trap"]
+size = Vector2(40, 40)
+
+[node name="DeathTrap" type="Area2D"]
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("1_trap")
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(0.85, 0.2, 0.2, 1)
+polygon = PackedVector2Array(-20, -20, 20, -20, 20, 20, -20, 20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_trap")
