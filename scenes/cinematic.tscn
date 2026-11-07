@@ -1,0 +1,6 @@
+[gd_scene format=3 load_steps=2]
+
+[ext_resource type="Script" path="res://scripts/cinematic.gd" id="1_cine"]
+
+[node name="Cinematic" type="CanvasLayer"]
+script = ExtResource("1_cine")

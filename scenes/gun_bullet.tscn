@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://m7xc0uc1di1u"]
+
+[ext_resource type="Script" path="res://scripts/gun_bullet.gd" id="1_gun_bullet"]
+
+[node name="GunBullet" type="Node2D"]
+script = ExtResource("1_gun_bullet")
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(0.55, 0.95, 1, 1)
+polygon = PackedVector2Array(-6, -2, 6, -2, 6, 2, -6, 2)

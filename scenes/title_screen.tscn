@@ -1,0 +1,382 @@
+[gd_scene format=3 uid="uid://bdggvt23p23e4"]
+
+[ext_resource type="Script" uid="uid://di7di7mrk86dc" path="res://scripts/title_screen.gd" id="1_title"]
+[ext_resource type="Texture2D" uid="uid://ctgkyy3r2bkdd" path="res://assets/cinematic/56dbfd46d2a0837aaf2a11cb2af67808.png" id="2_mgrm8"]
+[ext_resource type="Script" uid="uid://cxuur1cy03fsm" path="res://scripts/title_dust_layer.gd" id="3_dust"]
+[ext_resource type="Texture2D" uid="uid://cn5ssd34fewou" path="res://assets/ui/title_veil.png" id="4_veil"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 20.0
+content_margin_top = 16.0
+content_margin_right = 20.0
+content_margin_bottom = 16.0
+bg_color = Color(0.035, 0.07, 0.09, 0.97)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.34, 0.6, 0.57, 0.85)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="TitleScreen" type="Control" unique_id=664043591]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_title")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1801666700]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_mgrm8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Veil" type="ColorRect" parent="." unique_id=1913603356]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.05, 0.06, 0.12)
+
+[node name="VeilGradient" type="TextureRect" parent="." unique_id=1083923634]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_veil")
+expand_mode = 1
+
+[node name="DustLayer" type="Control" parent="." unique_id=479763536]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_dust")
+
+[node name="LeftMenuMargin" type="MarginContainer" parent="." unique_id=1869268259]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_top = -99.0
+offset_right = -19.0
+offset_bottom = -99.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 88
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 48
+
+[node name="TitleMenu" type="VBoxContainer" parent="LeftMenuMargin" unique_id=549827287]
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="GameTitle" type="Label" parent="LeftMenuMargin/TitleMenu" unique_id=411827763]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6117647, 0.92156863, 0.8156863, 1)
+theme_override_colors/font_shadow_color = Color(0.29, 0.92, 0.72, 0.3)
+theme_override_colors/font_outline_color = Color(0.047058824, 0.15294118, 0.15686275, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 68
+text = "DL-Circle"
+
+[node name="Subtitle" type="Label" parent="LeftMenuMargin/TitleMenu" unique_id=260163155]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5764706, 0.7411765, 0.7294118, 1)
+theme_override_colors/font_outline_color = Color(0.03137255, 0.06666667, 0.05882353, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 15
+text = "十二秒一轮 · 影子会替你记住"
+
+[node name="Spacer1" type="Control" parent="LeftMenuMargin/TitleMenu" unique_id=1461393256]
+custom_minimum_size = Vector2(0, 340)
+layout_mode = 2
+
+[node name="MenuBox" type="VBoxContainer" parent="LeftMenuMargin/TitleMenu" unique_id=1437070610]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="BtnStart" type="Button" parent="LeftMenuMargin/TitleMenu/MenuBox" unique_id=2136614143]
+custom_minimum_size = Vector2(252, 44)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.8117647, 0.9098039, 0.8862745, 1)
+theme_override_colors/font_focus_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_colors/font_pressed_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_colors/font_hover_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_font_sizes/font_size = 18
+text = "开始实验"
+
+[node name="BtnSettings" type="Button" parent="LeftMenuMargin/TitleMenu/MenuBox" unique_id=1808494618]
+custom_minimum_size = Vector2(252, 44)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.8117647, 0.9098039, 0.8862745, 1)
+theme_override_colors/font_focus_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_colors/font_pressed_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_colors/font_hover_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_font_sizes/font_size = 18
+text = "设置"
+
+[node name="BtnHelp" type="Button" parent="LeftMenuMargin/TitleMenu/MenuBox" unique_id=1270863356]
+custom_minimum_size = Vector2(252, 44)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.8117647, 0.9098039, 0.8862745, 1)
+theme_override_colors/font_focus_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_colors/font_pressed_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_colors/font_hover_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_font_sizes/font_size = 18
+text = "操作说明"
+
+[node name="BtnQuit" type="Button" parent="LeftMenuMargin/TitleMenu/MenuBox" unique_id=597690965]
+custom_minimum_size = Vector2(252, 44)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.8117647, 0.9098039, 0.8862745, 1)
+theme_override_colors/font_focus_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_colors/font_pressed_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_colors/font_hover_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_font_sizes/font_size = 18
+text = "退出"
+
+[node name="Spacer2" type="Control" parent="LeftMenuMargin/TitleMenu" unique_id=1282576217]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+
+[node name="SettingsLayer" type="Control" parent="." unique_id=949605144]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Dim" type="ColorRect" parent="SettingsLayer" unique_id=1573339886]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="SettingsLayer" unique_id=753383302]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="SettingsLayer/Center" unique_id=1051800844]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Box" type="VBoxContainer" parent="SettingsLayer/Center/Panel" unique_id=467633134]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="SettingsLayer/Center/Panel/Box" unique_id=951031407]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5607843, 0.9019608, 0.8117647, 1)
+theme_override_font_sizes/font_size = 20
+text = "设置"
+
+[node name="RowMaster" type="HBoxContainer" parent="SettingsLayer/Center/Panel/Box" unique_id=292338092]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="SettingsLayer/Center/Panel/Box/RowMaster" unique_id=180482345]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8117647, 0.9098039, 0.8862745, 1)
+theme_override_font_sizes/font_size = 15
+text = "主音量"
+
+[node name="Slider" type="HSlider" parent="SettingsLayer/Center/Panel/Box/RowMaster" unique_id=1534458606]
+custom_minimum_size = Vector2(170, 24)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="RowMusic" type="HBoxContainer" parent="SettingsLayer/Center/Panel/Box" unique_id=1791481085]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="SettingsLayer/Center/Panel/Box/RowMusic" unique_id=2105969350]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8117647, 0.9098039, 0.8862745, 1)
+theme_override_font_sizes/font_size = 15
+text = "音乐"
+
+[node name="Slider" type="HSlider" parent="SettingsLayer/Center/Panel/Box/RowMusic" unique_id=1318633353]
+custom_minimum_size = Vector2(170, 24)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="RowSfx" type="HBoxContainer" parent="SettingsLayer/Center/Panel/Box" unique_id=203734459]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="SettingsLayer/Center/Panel/Box/RowSfx" unique_id=1637654407]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8117647, 0.9098039, 0.8862745, 1)
+theme_override_font_sizes/font_size = 15
+text = "音效"
+
+[node name="Slider" type="HSlider" parent="SettingsLayer/Center/Panel/Box/RowSfx" unique_id=131502171]
+custom_minimum_size = Vector2(170, 24)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="BtnFullscreen" type="Button" parent="SettingsLayer/Center/Panel/Box" unique_id=547770840]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8117647, 0.9098039, 0.8862745, 1)
+theme_override_colors/font_hover_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_font_sizes/font_size = 15
+text = "全屏：关"
+
+[node name="BtnBack" type="Button" parent="SettingsLayer/Center/Panel/Box" unique_id=2000305720]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8117647, 0.9098039, 0.8862745, 1)
+theme_override_colors/font_hover_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_font_sizes/font_size = 15
+text = "返回"
+
+[node name="HelpLayer" type="Control" parent="." unique_id=2027549344]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Dim" type="ColorRect" parent="HelpLayer" unique_id=1564795528]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="HelpLayer" unique_id=1557800114]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="HelpLayer/Center" unique_id=646051580]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Box" type="VBoxContainer" parent="HelpLayer/Center/Panel" unique_id=1273628361]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="Title" type="Label" parent="HelpLayer/Center/Panel/Box" unique_id=982389434]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5607843, 0.9019608, 0.8117647, 1)
+theme_override_font_sizes/font_size = 20
+text = "操作说明"
+
+[node name="Line1" type="Label" parent="HelpLayer/Center/Panel/Box" unique_id=179955612]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7254902, 0.8392157, 0.8235294, 1)
+theme_override_font_sizes/font_size = 15
+text = "WASD / 方向键　　移动"
+
+[node name="Line2" type="Label" parent="HelpLayer/Center/Panel/Box" unique_id=1627401915]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7254902, 0.8392157, 0.8235294, 1)
+theme_override_font_sizes/font_size = 15
+text = "空格　　　　　　　跳跃"
+
+[node name="Line3" type="Label" parent="HelpLayer/Center/Panel/Box" unique_id=2042456510]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7254902, 0.8392157, 0.8235294, 1)
+theme_override_font_sizes/font_size = 15
+text = "E　　　　　　　　 交互 / 使用扳手"
+
+[node name="Line4" type="Label" parent="HelpLayer/Center/Panel/Box" unique_id=27079473]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7254902, 0.8392157, 0.8235294, 1)
+theme_override_font_sizes/font_size = 15
+text = "Q　　　　　　　　 结束本轮，留下回声"
+
+[node name="Line5" type="Label" parent="HelpLayer/Center/Panel/Box" unique_id=1756474938]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7254902, 0.8392157, 0.8235294, 1)
+theme_override_font_sizes/font_size = 15
+text = "Esc　　　　　　　 暂停"
+
+[node name="Spacer" type="Label" parent="HelpLayer/Center/Panel/Box" unique_id=1024324747]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+
+[node name="Line6" type="Label" parent="HelpLayer/Center/Panel/Box" unique_id=903714325]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7254902, 0.8392157, 0.8235294, 1)
+theme_override_font_sizes/font_size = 15
+text = "目标：借助过去的自己，逃出实验室。"
+
+[node name="Line7" type="Label" parent="HelpLayer/Center/Panel/Box" unique_id=1758224709]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7254902, 0.8392157, 0.8235294, 1)
+theme_override_font_sizes/font_size = 15
+text = "影子会重演你上一轮的动作——利用它。"
+
+[node name="BtnBack" type="Button" parent="HelpLayer/Center/Panel/Box" unique_id=1213007069]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8117647, 0.9098039, 0.8862745, 1)
+theme_override_colors/font_hover_color = Color(0.8745098, 0.9843137, 0.9490196, 1)
+theme_override_font_sizes/font_size = 15
+text = "返回"

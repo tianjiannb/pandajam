@@ -1,10 +1,35 @@
-[gd_scene load_steps=2 format=3 uid="uid://dcorpse01aa"]
+[gd_scene load_steps=7 format=3 uid="uid://dcorpse01aa"]
 
 [ext_resource type="Script" path="res://scripts/corpse.gd" id="1_corpse"]
+[ext_resource type="Texture2D" path="res://assets/player/dead.png" id="2_dead"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dead_00"]
+atlas = ExtResource("2_dead")
+region = Rect2(0, 0, 128, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dead_01"]
+atlas = ExtResource("2_dead")
+region = Rect2(128, 0, 128, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dead_02"]
+atlas = ExtResource("2_dead")
+region = Rect2(256, 0, 128, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dead"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_dead_00")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_dead_01")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_dead_02")}],
+"loop": false,
+"name": &"dead",
+"speed": 4.0
+}]
 
 [node name="Corpse" type="Node2D"]
 script = ExtResource("1_corpse")
 
-[node name="Body" type="Polygon2D" parent="."]
-color = Color(0.3, 0.35, 0.45, 0.75)
-polygon = PackedVector2Array(-16, -9, 16, -9, 16, 9, -16, 9)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -7)
+scale = Vector2(0.2207, 0.2285)
+sprite_frames = SubResource("SpriteFrames_dead")
+animation = &"dead"
+autoplay = "dead"
+

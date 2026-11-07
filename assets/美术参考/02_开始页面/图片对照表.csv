@@ -1,0 +1,9 @@
+﻿文件名,像素尺寸,用途
+title_bg.png,1920×1080,开始页面完整实验室背景
+title_logo.png,520×138,DL-Circle标题LOGO透明图，运行时同款文字由Label绘制
+title_veil.png,960×540,标题页暗色遮罩
+ui_button_disabled.png,96×48,按钮九宫格：禁用
+ui_button_hover.png,96×48,按钮九宫格：鼠标悬停
+ui_button_normal.png,96×48,按钮九宫格：常态
+ui_button_pressed.png,96×48,按钮九宫格：按下
+ui_menu_panel.png,160×160,暂停、设置菜单的九宫格底板

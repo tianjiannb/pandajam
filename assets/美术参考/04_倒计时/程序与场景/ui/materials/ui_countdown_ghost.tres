@@ -1,0 +1,22 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://ui/shaders/ui_countdown_handdrawn.gdshader" id="1_shader"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/jitter_strength = 0.002
+shader_parameter/noise_scale = 14.0
+shader_parameter/rotation_jitter = 0.9
+shader_parameter/jitter_speed = 0.7
+shader_parameter/time_seed = 0.0
+shader_parameter/ink_edge_strength = 0.65
+shader_parameter/ink_noise_scale = 48.0
+shader_parameter/ink_bleed = 0.35
+shader_parameter/ink_width = 1.2
+shader_parameter/danger_mix = 0.0
+shader_parameter/pulse = 0.0
+shader_parameter/base_alpha = 0.82
+shader_parameter/base_color = Color(0.851, 0.655, 0.949, 1)
+shader_parameter/danger_color = Color(0.945, 0.565, 0.537, 1)
+shader_parameter/ink_color = Color(0.039, 0.078, 0.102, 1)
+shader_parameter/atlas_cell_uv = Vector4(0, 0, 1, 1)

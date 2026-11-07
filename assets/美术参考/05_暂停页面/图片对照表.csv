@@ -1,0 +1,10 @@
+﻿文件名,像素尺寸,用途
+ui_button_disabled.png,96×48,按钮九宫格：禁用
+ui_button_hover.png,96×48,按钮九宫格：鼠标悬停
+ui_button_normal.png,96×48,按钮九宫格：常态
+ui_button_pressed.png,96×48,按钮九宫格：按下
+ui_icon_pause.png,24×24,通用图标：pause
+ui_icon_pause@2x.png,48×48,通用图标：pause@2x
+ui_icon_pause_16.png,16×16,通用图标：pause_16
+ui_icon_pause_32.png,32×32,通用图标：pause_32
+ui_menu_panel.png,160×160,暂停、设置菜单的九宫格底板

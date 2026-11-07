@@ -9,10 +9,26 @@ class_name Corpse
 @export var player_color := Color(0.3, 0.35, 0.45, 0.75)
 @export var ghost_color := Color(0.55, 0.25, 0.55, 0.65)
 
-@onready var _body: Polygon2D = $Body
+signal animation_finished
+
+@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 
 func _ready() -> void:
 	add_to_group("corpses")
 	add_to_group("ghost_corpses" if is_ghost_corpse else "player_corpses")
-	_body.color = ghost_color if is_ghost_corpse else player_color
+	_sprite.animation_finished.connect(_on_animation_finished)
+	_sprite.play(&"dead")
+	# 过去的你继续保留色调区分，玩家死亡使用原始死亡贴图。
+	if is_ghost_corpse:
+		var material := _sprite.material as ShaderMaterial
+		if material != null:
+			material = material.duplicate() as ShaderMaterial
+			_sprite.material = material
+			material.set_shader_parameter("tint_color", ghost_color)
+
+
+func _on_animation_finished() -> void:
+	animation_finished.emit()
+
+

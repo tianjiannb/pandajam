@@ -46,3 +46,5 @@ func _refresh() -> void:
 	_active_visual.visible = is_active
 	_visual.visible = not is_active
 	state_changed.emit(plate_id, is_active)
+	if is_active:
+		SfxManager.play("switch")

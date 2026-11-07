@@ -1,0 +1,5 @@
+﻿文件名,像素尺寸,用途
+ui_countdown_digits.png,768×80,倒计时数字图集，0-9及符号
+ui_countdown_panel.png,96×56,普通倒计时底板
+ui_countdown_panel_ghost.png,96×56,回声倒计时底板
+ui_countdown_panel_warning.png,96×56,最后三秒警告倒计时底板

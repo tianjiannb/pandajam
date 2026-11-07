@@ -89,6 +89,7 @@ func _fire() -> void:
 	_bullet_count += 1
 	var dir := _direction()
 	fired.emit(dir)
+	SfxManager.play("gun_fire")
 
 	if bullet_scene == null:
 		return

@@ -1,0 +1,170 @@
+[
+  {
+    "file": "title",
+    "width": 1280,
+    "height": 720,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 22.04
+  },
+  {
+    "file": "title_settings",
+    "width": 1280,
+    "height": 720,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 17.1
+  },
+  {
+    "file": "title_help",
+    "width": 1280,
+    "height": 720,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 16.45
+  },
+  {
+    "file": "controls",
+    "width": 1280,
+    "height": 720,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 31.28
+  },
+  {
+    "file": "countdown",
+    "width": 1280,
+    "height": 720,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 26.39
+  },
+  {
+    "file": "pause",
+    "width": 1280,
+    "height": 720,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 22.29
+  },
+  {
+    "file": "settings",
+    "width": 1280,
+    "height": 720,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 24.19
+  },
+  {
+    "file": "audio",
+    "width": 1280,
+    "height": 720,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 37.93
+  },
+  {
+    "file": "controls_alpha",
+    "width": 436,
+    "height": 250,
+    "alpha_min": 2,
+    "alpha_max": 255,
+    "RGB_std": 57.06
+  },
+  {
+    "file": "compact_alpha",
+    "width": 436,
+    "height": 56,
+    "alpha_min": 2,
+    "alpha_max": 255,
+    "RGB_std": 42.41
+  },
+  {
+    "file": "clock_normal",
+    "width": 96,
+    "height": 56,
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "RGB_std": 64.74
+  },
+  {
+    "file": "clock_warning",
+    "width": 96,
+    "height": 56,
+    "alpha_min": 1,
+    "alpha_max": 255,
+    "RGB_std": 60.33
+  },
+  {
+    "file": "clock_ghost",
+    "width": 96,
+    "height": 56,
+    "alpha_min": 0,
+    "alpha_max": 233,
+    "RGB_std": 52.06
+  },
+  {
+    "file": "pause_alpha",
+    "width": 1280,
+    "height": 720,
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "RGB_std": 24.79
+  },
+  {
+    "file": "settings_alpha",
+    "width": 1280,
+    "height": 720,
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "RGB_std": 27.37
+  },
+  {
+    "file": "logo_alpha",
+    "width": 520,
+    "height": 138,
+    "alpha_min": 0,
+    "alpha_max": 255,
+    "RGB_std": 78.28
+  },
+  {
+    "file": "title_960x540",
+    "width": 960,
+    "height": 540,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 21.91
+  },
+  {
+    "file": "controls_960x540",
+    "width": 960,
+    "height": 540,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 30.45
+  },
+  {
+    "file": "countdown_960x540",
+    "width": 960,
+    "height": 540,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 25.57
+  },
+  {
+    "file": "pause_960x540",
+    "width": 960,
+    "height": 540,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 22.11
+  },
+  {
+    "file": "settings_960x540",
+    "width": 960,
+    "height": 540,
+    "alpha_min": 255,
+    "alpha_max": 255,
+    "RGB_std": 23.65
+  }
+]

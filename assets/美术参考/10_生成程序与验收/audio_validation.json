@@ -1,0 +1,74 @@
+[
+  {
+    "file": "01_射击_01_安保气动枪.wav",
+    "seconds": 0.48,
+    "peak": 0.629974365234375,
+    "RMS": 0.08216359610608824,
+    "endpoint_peak": 0.0,
+    "pass": true
+  },
+  {
+    "file": "01_射击_02_电弧穿刺.wav",
+    "seconds": 0.62,
+    "peak": 0.629974365234375,
+    "RMS": 0.0647804278909193,
+    "endpoint_peak": 0.0,
+    "pass": true
+  },
+  {
+    "file": "01_射击_03_生化脉冲.wav",
+    "seconds": 0.78,
+    "peak": 0.629974365234375,
+    "RMS": 0.06783320490370348,
+    "endpoint_peak": 0.0,
+    "pass": true
+  },
+  {
+    "file": "02_冲击_01_金属重击.wav",
+    "seconds": 1.35,
+    "peak": 0.66998291015625,
+    "RMS": 0.051344103898750486,
+    "endpoint_peak": 0.0,
+    "pass": true
+  },
+  {
+    "file": "02_冲击_02_玻璃与肉质.wav",
+    "seconds": 1.15,
+    "peak": 0.66998291015625,
+    "RMS": 0.061165391155806506,
+    "endpoint_peak": 0.0,
+    "pass": true
+  },
+  {
+    "file": "02_冲击_03_低频爆震.wav",
+    "seconds": 2.0,
+    "peak": 0.66998291015625,
+    "RMS": 0.05073014732998477,
+    "endpoint_peak": 0.0,
+    "pass": true
+  },
+  {
+    "file": "03_死亡_01_实验体崩解.wav",
+    "seconds": 2.6,
+    "peak": 0.649993896484375,
+    "RMS": 0.09111567817445206,
+    "endpoint_peak": 0.0,
+    "pass": true
+  },
+  {
+    "file": "03_死亡_02_窒息回声.wav",
+    "seconds": 3.2,
+    "peak": 0.649993896484375,
+    "RMS": 0.09565403217783026,
+    "endpoint_peak": 0.0,
+    "pass": true
+  },
+  {
+    "file": "03_死亡_03_循环吞噬.wav",
+    "seconds": 3.8,
+    "peak": 0.649993896484375,
+    "RMS": 0.09655015275620063,
+    "endpoint_peak": 0.0,
+    "pass": true
+  }
+]

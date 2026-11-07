@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <polygon points="3.4,9.4 7.6,9.4 12.2,5 12.2,19 7.6,14.6 3.4,14.6" fill="#EAF6FA"/>
+  <path d="M14.4 9.4 C16.2 10.4 17.0 11.1 17.0 12 C17.0 12.9 16.2 13.6 14.4 14.6" fill="none" stroke="#EAF6FA" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16.6 6.6 C19.4 8.2 20.6 9.8 20.6 12 C20.6 14.2 19.4 15.8 16.6 17.4" fill="none" stroke="#EAF6FA" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

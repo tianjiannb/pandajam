@@ -27,6 +27,7 @@ func destroy() -> void:
 	visible = false
 	_collision.set_deferred("disabled", true)
 	destroyed.emit()
+	SfxManager.play("tool")
 
 
 ## 循环重置：恢复原状。

@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://shaders/ghost_tint.gdshader" id="1_ghosttint"]
+
+[resource]
+shader = ExtResource("1_ghosttint")
+shader_parameter/tint_color = Color(0.85, 0.35, 0.95, 1)
+shader_parameter/tint_strength = 0.65

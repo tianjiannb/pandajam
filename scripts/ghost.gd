@@ -15,6 +15,11 @@ signal hammer_state_changed(has_hammer: bool)
 var has_hammer := false
 @export var hammer_use_range := 72.0
 
+## 与玩家共用同一张序列图；移动时同样靠左右摇晃 + 轻微起伏表现动效（不换走路帧）。
+@export var walk_wobble_degrees := 10.0
+@export var walk_wobble_speed := 14.0
+@export var walk_bob_height := 3.0
+
 var _frames: Array[Transform2D] = []
 var _actions: Array[bool] = []
 var _playhead := 0
@@ -23,8 +28,14 @@ var _cycle_duration := 12.0
 ## 本轮是否已死亡：死亡后停留在原地（不再前进播放头），直到 restart_cycle()。
 var _dead := false
 
+## 回放时根据上一帧与当前帧的位移方向选动画/摇摆，而非实时输入。
+var _prev_position := Vector2.ZERO
+var _sprite_home := Vector2.ZERO
+var _wobble_phase := 0.0
+
 @onready var countdown_timer: Timer = $CountdownTimer
 @onready var countdown_label: Label = $CountdownLabel
+@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 
 func _ready() -> void:
@@ -32,13 +43,31 @@ func _ready() -> void:
 	add_to_group("plate_activator")
 	add_to_group("bullet_target")
 	countdown_timer.timeout.connect(restart_cycle)
+	_sprite_home = _sprite.position
+	_sprite.play(&"idle")
+	_apply_random_tint()
 	# 手动调用 start_replay 时可能在 add_child 之前设置位置；入树后恢复首帧，
 	# 防止 Node2D 的通知流程把全局位置重置为默认值。
 	if not _frames.is_empty():
 		global_transform = _frames[0]
+		_prev_position = global_position
 		countdown_timer.wait_time = _cycle_duration
 		countdown_timer.start()
 	_update_countdown_label()
+
+
+## 每个副本实例随机生成一个色调，让多个历史副本在视觉上可以互相区分，
+## 同时与玩家当前使用的正常贴图颜色区别开（"过去的自己"的既定美术意图）。
+func _apply_random_tint() -> void:
+	var material := _sprite.material as ShaderMaterial
+	if material == null:
+		return
+	# 复制一份独立的 ShaderMaterial，避免所有副本共享同一个资源实例改动互相影响。
+	material = material.duplicate() as ShaderMaterial
+	_sprite.material = material
+	var hue := randf()
+	var color := Color.from_hsv(hue, 0.55, 0.95, 1.0)
+	material.set_shader_parameter("tint_color", color)
 
 
 func _process(_delta: float) -> void:
@@ -72,9 +101,11 @@ func start_replay(frames: Array[Transform2D], actions: Array[bool] = [], cycle_d
 	_dead = false
 	visible = true
 	reset_hammer()
+	_reset_visual()
 	if _frames.is_empty():
 		return
 	global_transform = _frames[0]
+	_prev_position = global_position
 	if is_node_ready():
 		countdown_timer.wait_time = _cycle_duration
 		countdown_timer.start()
@@ -88,12 +119,22 @@ func restart_cycle() -> void:
 	_dead = false
 	visible = true
 	reset_hammer()
+	_reset_visual()
 	if not _frames.is_empty():
 		global_transform = _frames[0]
+		_prev_position = global_position
 	if is_node_ready():
 		countdown_timer.stop()
 		countdown_timer.start()
 		_update_countdown_label()
+
+
+## 循环边界重置时让角色姿态立刻回正（与 player.gd 的 _reset_visual 一致）。
+func _reset_visual() -> void:
+	_wobble_phase = 0.0
+	if _sprite != null:
+		_sprite.rotation = 0.0
+		_sprite.position = _sprite_home
 
 
 func pickup_hammer() -> bool:
@@ -110,6 +151,14 @@ func reset_hammer() -> void:
 		hammer_state_changed.emit(false)
 
 
+func pickup_gun() -> bool:
+	return false
+
+
+func reset_gun() -> void:
+	pass
+
+
 func use_hammer() -> void:
 	if not has_hammer:
 		return
@@ -118,11 +167,40 @@ func use_hammer() -> void:
 			object.destroy()
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if _frames.is_empty() or _dead:
 		return
 	global_transform = _frames[_playhead]
 	if _playhead < _actions.size() and _actions[_playhead]:
 		use_hammer()
+	_update_animation(delta)
+	_prev_position = global_position
 	# 循环边界由倒计时统一控制；尾帧之后停留在原地，等待同步释放。
 	_playhead = mini(_playhead + 1, _frames.size() - 1)
+
+
+## 按回放的逐帧位移方向选择四向动画；停止移动时回到 idle。与 player.gd 的
+## _direction_anim_name/_update_animation 逻辑保持一致，直接复用回放位移作为"输入方向"。
+func _direction_anim_name(dir: Vector2) -> StringName:
+	if absf(dir.x) >= absf(dir.y):
+		return &"right" if dir.x > 0.0 else &"left"
+	return &"down" if dir.y > 0.0 else &"up"
+
+
+func _update_animation(delta: float) -> void:
+	var movement := global_position - _prev_position
+	var moving := movement.length() > 0.5
+	if not moving:
+		if _sprite.animation != &"idle":
+			_sprite.play(&"idle")
+		_wobble_phase = 0.0
+		var back := minf(1.0, delta * 14.0)
+		_sprite.rotation = lerpf(_sprite.rotation, 0.0, back)
+		_sprite.position = _sprite.position.lerp(_sprite_home, back)
+		return
+
+	_sprite.play(_direction_anim_name(movement))
+	_wobble_phase += delta * walk_wobble_speed
+	var swing := sin(_wobble_phase)
+	_sprite.rotation = deg_to_rad(walk_wobble_degrees) * swing
+	_sprite.position = _sprite_home + Vector2(0.0, -absf(swing) * walk_bob_height)

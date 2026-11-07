@@ -34,6 +34,14 @@ signal hammer_state_changed(has_hammer: bool)
 var has_hammer := false
 @export var hammer_use_range := 72.0
 
+var has_gun := false
+@export var gun_fire_cooldown := 0.35
+@export var gun_bullet_speed := 900.0
+@export var gun_bullet_max_distance := 900.0
+var _gun_cooldown_left := 0.0
+var _gun_shot_count := 0
+const GUN_BULLET_SCENE := preload("res://scenes/gun_bullet.tscn")
+
 var is_jumping := false
 var _jump_direction := Vector2.RIGHT
 var _jump_time_left := 0.0
@@ -51,6 +59,10 @@ var _start_transform: Transform2D
 var _recording: Array[Transform2D] = []
 var _recorded_actions: Array[bool] = []
 var _ghost_count := 0
+var _pending_death_reset := false
+var _devouring := false  # 被死亡装置吞噬中：冻结移动与走路摇晃，交给吞噬动画驱动
+var _tick_played := false
+var _gun_direction := Vector2.RIGHT
 
 
 func _ready() -> void:
@@ -69,6 +81,10 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	_update_countdown_label()
+	# 倒计时剩余 3 秒时只播放一次提示音；每轮重置时复位标记。
+	if not _tick_played and not countdown_timer.is_stopped() and countdown_timer.time_left <= 3.0:
+		_tick_played = true
+		SfxManager.play("tick")
 
 
 func _update_countdown_label() -> void:
@@ -82,15 +98,66 @@ func _on_countdown_timeout() -> void:
 ## 玩家死亡：立即清空倒计时，统一由 timeout 执行重置。
 ## 新循环中不保留玩家尸体；副本死亡留下的尸体也随本次重置统一清理。
 func on_bullet_hit() -> void:
+	if _pending_death_reset:
+		return
+	_pending_death_reset = true
+	countdown_timer.stop()
+	_spawn_corpse(global_transform)
+	visible = false
+	velocity = Vector2.ZERO
+	killed.emit()
+	SfxManager.play("death")
+	var death_animation_time := 0.75
+	var timer := get_tree().create_timer(death_animation_time, true, false, true)
+	timer.timeout.connect(_finish_player_death)
+
+
+## 被血肉能量垃圾桶吞噬：不播放默认死亡、不留尸体，而是被吸向桶口、旋转缩小消失。
+## 仍走正常重置流程——本轮结束会生成「过去的你」，开门信号机制不受影响。
+func on_devoured(trap: Node2D) -> void:
+	if _pending_death_reset:
+		return
+	_pending_death_reset = true
+	_devouring = true
+	countdown_timer.stop()
+	killed.emit()
+	SfxManager.play("death")
+	visible = true
+	var mouth: Vector2 = trap.global_position + Vector2(0, -26.0)
+	var t := create_tween()
+	t.set_parallel(true)
+	# 被吸向桶口（加速），旋转卷入血肉漩涡，同时缩小、染血。
+	t.tween_property(self, "global_position", mouth, 0.55)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	t.tween_property(_sprite, "rotation", TAU * 1.5, 0.8)
+	t.tween_property(_sprite, "scale", Vector2.ONE * 0.04, 0.8)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	t.tween_property(_sprite, "modulate", Color(1.0, 0.45, 0.5, 1.0), 0.6)
+	# 全部吞入后：隐藏本体，走正常死亡重置（生成副本、开启新一轮）。
+	t.chain().tween_callback(_on_devour_animation_done)
+
+
+func _on_devour_animation_done() -> void:
+	visible = false
+	_finish_player_death()
+
+
+func _finish_player_death() -> void:
+	if not _pending_death_reset:
+		return
+	_pending_death_reset = false
+	visible = true
+	_on_countdown_timeout()
+
+
+
+## Q：提前结束当前循环，不视为死亡，不播放死亡动画。
+## 保留本轮录制，并立即生成“过去的你”进入下一轮。
+func end_round_early() -> void:
+	if _pending_death_reset:
+		return
 	countdown_timer.stop()
 	_on_countdown_timeout()
-	killed.emit()
-
-
-## 自杀键（Q）：玩家主动清空本轮倒计时，立即结束当前循环。
-## 复用与机关枪命中完全一致的死亡流程，保证两种死法效果一致。
-func suicide() -> void:
-	on_bullet_hit()
 
 
 ## 尸体只是视觉残留：不碰撞、不触发机关；下一次任意重置时消失。
@@ -101,6 +168,7 @@ func _spawn_corpse(death_transform: Transform2D) -> void:
 	corpse.is_ghost_corpse = false
 	get_parent().add_child(corpse)
 	corpse.global_transform = death_transform
+
 
 
 func _clear_corpses() -> void:
@@ -136,6 +204,8 @@ func _reset_round_and_spawn_ghost() -> void:
 	# 先传递给控制器完成评估（例如 ghost1 触发 trap1 + player 触发 trap2 = 开门），
 	# 然后才在新循环的起始帧清空进度、关门，准备下一轮的重新点亮。
 	call_deferred("_reset_traps_and_controllers")
+	_tick_played = false
+	SfxManager.play("rewind")
 
 
 ## 延迟到下一帧执行：清空死亡触发装置与信号控制器的本轮状态。
@@ -170,6 +240,28 @@ func pickup_hammer() -> bool:
 	return true
 
 
+func pickup_gun() -> bool:
+	if has_gun:
+		return false
+	has_gun = true
+	return true
+
+
+func reset_gun() -> void:
+	pass
+
+
+func fire_gun() -> void:
+	if not has_gun or _gun_cooldown_left > 0.0:
+		return
+	_gun_cooldown_left = gun_fire_cooldown
+	_gun_shot_count += 1
+	var bullet := GUN_BULLET_SCENE.instantiate()
+	get_parent().add_child(bullet)
+	bullet.global_position = global_position + _gun_direction * 18.0
+	bullet.setup(_gun_direction, gun_bullet_speed, gun_bullet_max_distance, get_rid(), _gun_shot_count)
+
+
 func reset_hammer() -> void:
 	if has_hammer:
 		has_hammer = false
@@ -185,10 +277,20 @@ func use_hammer() -> void:
 			object.destroy()
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.physical_keycode == KEY_Q or event.keycode == KEY_Q:
+			end_round_early()
+
+
 func _physics_process(delta: float) -> void:
+	if _devouring:
+		return  # 吞噬动画期间冻结移动 / 录制 / 摇晃，避免覆盖动画
 	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if input_dir.length() > 0.0:
 		_last_move_dir = input_dir.normalized()
+		_gun_direction = _last_move_dir
+	_gun_cooldown_left = maxf(_gun_cooldown_left - delta, 0.0)
 
 	if jump_enabled and not is_jumping and Input.is_action_just_pressed("jump"):
 		_start_jump()
@@ -211,9 +313,8 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("use_hammer"):
 		use_hammer()
-
-	if Input.is_action_just_pressed("suicide"):
-		suicide()
+	if Input.is_action_just_pressed("fire_gun"):
+		fire_gun()
 
 	_recording.append(global_transform)
 	_recorded_actions.append(Input.is_action_just_pressed("use_hammer"))
@@ -261,9 +362,12 @@ func _update_animation(delta: float) -> void:
 	_sprite.position = _sprite_home + Vector2(0.0, -absf(swing) * walk_bob_height)
 
 
-## 循环边界重置时让角色姿态立刻回正。
+## 循环边界重置时让角色姿态立刻回正（含吞噬动画带来的缩放/染色/旋转）。
 func _reset_visual() -> void:
 	_wobble_phase = 0.0
+	_devouring = false
 	if _sprite != null:
 		_sprite.rotation = 0.0
 		_sprite.position = _sprite_home
+		_sprite.scale = Vector2.ONE
+		_sprite.modulate = Color.WHITE

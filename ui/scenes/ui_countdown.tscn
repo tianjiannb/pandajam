@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/scripts/ui_countdown.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/ui/ui_countdown_panel.png" id="2_panel"]
+[ext_resource type="Texture2D" path="res://assets/ui/ui_countdown_digits.png" id="3_digits"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tens"]
+atlas = ExtResource("3_digits")
+region = Rect2(640, 0, 64, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_units"]
+atlas = ExtResource("3_digits")
+region = Rect2(704, 0, 64, 80)
+
+[node name="UICountdown" type="Control"]
+custom_minimum_size = Vector2(96, 56)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 96.0
+offset_bottom = 56.0
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Panel" type="NinePatchRect" parent="."]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("2_panel")
+patch_margin_left = 14
+patch_margin_top = 14
+patch_margin_right = 14
+patch_margin_bottom = 14
+
+[node name="Digits" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 4.0
+offset_right = 86.0
+offset_bottom = 52.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="DigitTens" type="TextureRect" parent="Digits"]
+texture_filter = 1
+custom_minimum_size = Vector2(38, 48)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_tens")
+expand_mode = 1
+
+[node name="DigitUnits" type="TextureRect" parent="Digits"]
+texture_filter = 1
+custom_minimum_size = Vector2(38, 48)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_units")
+expand_mode = 1

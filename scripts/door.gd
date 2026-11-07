@@ -57,3 +57,5 @@ func set_open(open: bool) -> void:
 	# 物理回调中不能直接改碰撞，延迟设置。
 	_collision.set_deferred("disabled", is_open)
 	state_changed.emit(door_id, is_open)
+	if is_open:
+		SfxManager.play("door")
